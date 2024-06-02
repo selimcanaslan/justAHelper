@@ -185,17 +185,41 @@ class Metin2Helper:
         self.sales_list_refresh()
 
     def open_sales_analyse(self):
-        
+        m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12 = [], [], [], [], [], [], [], [], [], [], [], []
         conn = DbConnection().get_conn()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM Sales ORDER BY Sales_date")
         self.first_sale = datetime
-        x=0
-        y=0
+        x = 0
+        y = 0
         total_price = 0
         total_won = 0
         for _ in cursor.fetchall():
             date = _[3]
+            if date.month == 1:
+                m1.append(_[2])
+            elif date.month == 2:
+                m2.append(_[2])
+            elif date.month == 3:
+                m3.append(_[2])
+            elif date.month == 4:
+                m4.append(_[2])
+            elif date.month == 5:
+                m5.append(_[2])
+            elif date.month == 6:
+                m6.append(_[2])
+            elif date.month == 7:
+                m7.append(_[2])
+            elif date.month == 8:
+                m8.append(_[2])
+            elif date.month == 9:
+                m9.append(_[2])
+            elif date.month == 10:
+                m10.append(_[2])
+            elif date.month == 11:
+                m11.append(_[2])
+            elif date.month == 12:
+                m12.append(_[2])
             if y == 0:
                 self.first_sale = date
             total_price += _[2]
@@ -203,14 +227,74 @@ class Metin2Helper:
             x += 1
             if y != 1:
                 y += 1
+
+        # Initialize month variables
+        January = February = March = April = May = June = July = August = September = October = November = December = 0
+
+        # Sum the values for each month
+        for j in m1:
+            January += j * 0.92
+        for f in m2:
+            February += f * 0.92
+        for mr in m3:
+            March += mr * 0.92
+        for ap in m4:
+            April += ap * 0.92
+        for ma in m5:
+            May += ma * 0.92
+        for jn in m6:
+            June += jn * 0.92
+        for jl in m7:
+            July += jl * 0.92
+        for ag in m8:
+            August += ag * 0.92
+        for sp in m9:
+            September += sp * 0.92
+        for oc in m10:
+            October += oc * 0.92
+        for nv in m11:
+            November += nv * 0.92
+        for dc in m12:
+            December += dc * 0.92
+
+        # Calculate income per day
         now = datetime.now()
         diff = abs(now - self.first_sale).days
-        income_per_day = total_price / diff
+        income_per_day = (total_price / diff) * 0.92
         str_pdi = str(income_per_day)[:6]
-        msg = f"Work Time : {diff} Days ({diff // 30}M - {diff % 30}D)\nTotal Won Sold : {total_won} Won\nTotal Income : {total_price} TL\nPer Day Income : {str_pdi}\nPer Month Income : {str(round(income_per_day * 30, 2))}"
-        InfoMessage(title="title", msg=msg).show_info()
+
+        # Create the message
+        msg = f"Work Time : {diff} Days ({diff // 30}M - {diff % 30}D)\nTotal Won Sold : {total_won} Won\nTotal Income : {round(total_price * 0.92,2)} TL\nPer Day Income : {str_pdi}\nPer Month Income : {str(round(income_per_day * 30, 2))}"
+        current_date = datetime.now()
+        current_month = current_date.month
+        if current_month == 1:
+            msg += f"\nJanuary: {January} TL ({len(m1)} Sales)"
+        elif current_month == 2:
+            msg += f"\nJanuary: {January} TL ({len(m1)} Sales)\nFebruay: {February} TL ({len(m2)} Sales)"
+        elif current_month == 3:
+            msg += f"\nJanuary: {January} TL ({len(m1)} Sales)\nFebruay: {February} TL ({len(m2)} Sales)\n March: {March} TL ({len(m3)} Sales)"
+        elif current_month == 4:
+            msg += f"\nJanuary: {January} TL ({len(m1)} Sales)\nFebruay: {February} TL ({len(m2)} Sales)\n March: {March} TL ({len(m3)} Sales)\n April: {April} TL ({len(m4)} Sales)"
+        elif current_month == 5:
+            msg += f"\nJanuary: {January} TL ({len(m1)} Sales)\nFebruay: {February} TL ({len(m2)} Sales)\nMarch: {March} TL ({len(m3)} Sales)\nApril: {April} TL ({len(m4)} Sales)\nMay: {May} TL ({len(m5)} Sales)"
+        elif current_month == 6:
+            msg += f"\nJanuary: {January} TL ({len(m1)} Sales)\nFebruay: {February} TL ({len(m2)} Sales)\nMarch: {March} TL ({len(m3)} Sales)\nApril: {April} TL ({len(m4)} Sales)\nMay: {round(May,2)} TL ({len(m5)} Sales)\nJune: {June} TL ({len(m6)} Sales)"
+        elif current_month == 7:
+            msg += f"\nJanuary: {January} TL ({len(m1)} Sales)\nFebruay: {February} TL ({len(m2)} Sales)\nMarch: {March} TL ({len(m3)} Sales)\nApril: {April} TL ({len(m4)} Sales)\nMay: {May} TL ({len(m5)} Sales)\nJune: {June} TL ({len(m6)} Sales)\nJuly: {July} TL ({len(m7)} Sales)"
+        elif current_month == 8:
+            msg += f"\nJanuary: {January} TL ({len(m1)} Sales)\nFebruay: {February} TL ({len(m2)} Sales)\nMarch: {March} TL ({len(m3)} Sales)\nApril: {April} TL ({len(m4)} Sales)\nMay: {May} TL ({len(m5)} Sales)\nJune: {June} TL ({len(m6)} Sales)\nJuly: {July} TL ({len(m7)} Sales)\nAugust: {August} TL ({len(m8)} Sales)"
+        elif current_month == 9:
+            msg += f"\nJanuary: {January} TL ({len(m1)} Sales)\nFebruay: {February} TL ({len(m2)} Sales)\nMarch: {March} TL ({len(m3)} Sales)\nApril: {April} TL ({len(m4)} Sales)\nMay: {May} TL ({len(m5)} Sales)\nJune: {June} TL ({len(m6)} Sales)\nJuly: {July} TL ({len(m7)} Sales)\nAugust: {August} TL ({len(m8)} Sales)\nSeptember: {September} TL ({len(m9)} Sales)"
+        elif current_month == 10:
+            msg += f"\nJanuary: {January} TL ({len(m1)} Sales)\nFebruay: {February} TL ({len(m2)} Sales)\nMarch: {March} TL ({len(m3)} Sales)\nApril: {April} TL ({len(m4)} Sales)\nMay: {May} TL ({len(m5)} Sales)\nJune: {June} TL ({len(m6)} Sales)\nJuly: {July} TL ({len(m7)} Sales)\nAugust: {August} TL ({len(m8)} Sales)\nSeptember: {September} TL ({len(m9)} Sales)\nOctober: {October} TL ({len(m10)} Sales)"
+        elif current_month == 11:
+            msg += f"\nJanuary: {January} TL ({len(m1)} Sales)\nFebruay: {February} TL ({len(m2)} Sales)\nMarch: {March} TL ({len(m3)} Sales)\nApril: {April} TL ({len(m4)} Sales)\nMay: {May} TL ({len(m5)} Sales)\nJune: {June} TL ({len(m6)} Sales)\nJuly: {July} TL ({len(m7)} Sales)\nAugust: {August} TL ({len(m8)} Sales)\nSeptember: {September} TL ({len(m9)} Sales)\nOctober: {October} TL ({len(m10)} Sales)\nNovember: {November} TL ({len(m11)} Sales)"
+        elif current_month == 12:
+            msg += f"\nJanuary: {January} TL ({len(m1)} Sales)\nFebruay: {February} TL ({len(m2)} Sales)\nMarch: {March} TL ({len(m3)} Sales)\nApril: {April} TL ({len(m4)} Sales)\nMay: {May} TL ({len(m5)} Sales)\nJune: {June} TL ({len(m6)} Sales)\nJuly: {July} TL ({len(m7)} Sales)\nAugust: {August} TL ({len(m8)} Sales)\nSeptember: {September} TL ({len(m9)} Sales)\nOctober: {October} TL ({len(m10)} Sales)\nNovember: {November} TL ({len(m11)} Sales)\nDecember: {December} TL ({len(m12)} Sales)"
+         
+        # Show the information message
+        InfoMessage(title="Analyse", msg=msg).show_info()
         conn.close()
-        
 
     def get_event_list(self):
         conn = DbConnection().get_conn()
@@ -283,7 +367,7 @@ class Metin2Helper:
         conn.close()
         total_income = 0
         for record in records:
-            total_income += record[2]
+            total_income += record[2] * 0.92
         self.total_record_count.configure(text=f"Total: {len(records)} Sales ~ Income: {total_income}₺")
 
     def sales_list_refresh(self):
@@ -706,7 +790,7 @@ class InfoMessage:
         self.title = title
 
     def show_info(self):
-        CTkMessagebox(title=self.title, message=self.msg, width=WIDTH, height=HEIGHT)
+        CTkMessagebox(title=self.title, message=self.msg, width=WIDTH, height=HEIGHT, title_color="green", icon=None,font=("Roboto",14),text_color="white")
 
     def show_checkmark(self):
         CTkMessagebox(message=self.msg,
